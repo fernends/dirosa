@@ -1,0 +1,28 @@
+﻿@using DeRosaWebApp.Models.Management;
+@model ManagementSobre
+@{
+    ViewData["Title"] = "Sobre Nós";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center title-about">Sobre Nós</h2>
+    <p class="mt-4" style="font-size: 20px; color: @Model.Color; font-family:'@Model.Font'">
+        @Model.TituloSobre
+    </p>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <img src="~/Imagens/julia.png" alt="Doces artesanais" class="img-fluid">
+        </div>
+        <div class="col-md-6" style="font-size: 18px;">
+            <p style="color: @Model.Color2; font-family:'@Model.Font2'">
+                @Model.TextoSobre
+            </p>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="@Url.Action("MeusContatos", "Home")" class="btn btn-primary" id="btnsmall">Entre em contato</a>
+        <a href="@Url.Action("Produtos", "Produto")" class="btn btn-info" id="btnsmall">Veja nossos produtos</a>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+﻿@using DeRosaWebApp.Models;
+@using System.Globalization;
+@model ReflectionIT.Mvc.Paging.PagingList<DeRosaWebApp.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="titulo-tabela">Pedidos</h1>
+<div class="center">
+    <div class="form-container">
+        <form method="get" class="form-inline search-form">
+            <input name="filter" class="form-control" placeholder="Pesquise um pedido..." value="@Model.RouteValue["Filter"]" />
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true">Procurar</span>
+            </button>
+        </form>
+        <p class="total-count">Total de pedidos: @Model.TotalRecordCount</p>
+        <div>
+            <vc:pager paging-list="@Model"></vc:pager>
+        </div>
+    </div>
+</div>
+<div class="container-fluid admin">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Cod_Pedido)</th>
+                <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                <th>@Html.DisplayNameFor(model => model.DataPedido)</th>
+                <th>@Html.DisplayNameFor(model => model.Logradouro)</th>
+                <th>@Html.DisplayNameFor(model => model.Numero)</th>
+                <th>@Html.DisplayNameFor(model => model.Telefone)</th>
+                <th>@Html.DisplayNameFor(model => model.TotalItensPedido)</th>
+                <th>@Html.DisplayNameFor(model => model.TotalPedido)</th>
+                <th>@Html.DisplayNameFor(model => model.Entregue)</th>
+                <th>@Html.DisplayNameFor(model => model.Concluido)</th>
+                <th>@Html.DisplayNameFor(model => model.Agendado)</th>
+                <th>@Html.DisplayNameFor(model => model.Pago)</th>
+                <th>@Html.DisplayNameFor(model => model.Frete)</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td data-label="Número Pedido">@Html.DisplayFor(modelItem => item.Cod_Pedido)</td>
+                    <td data-label="Nome">@Html.DisplayFor(modelItem => item.Nome)</td>
+                    <td data-label="DataPedido">@Html.DisplayFor(modelItem => item.DataPedido)</td>
+                    <td data-label="Rua">@Html.DisplayFor(modelItem => item.Logradouro)</td>
+                    <td data-label="Número">@Html.DisplayFor(modelItem => item.Numero)</td>
+                    <td data-label="Telefone">@Html.DisplayFor(modelItem => item.Telefone)</td>
+                    <td data-label="Total Itens Pedido">@Html.DisplayFor(modelItem => item.TotalItensPedido)</td>
+                    <td data-label="Total Pedido">R$@item.TotalPedido.ToString("F2", CultureInfo.InvariantCulture)</td>
+                    <td data-label="Entregue" class="status" data-status="@item.Entregue">
+                        @Html.DisplayFor(modelItem => item.Entregue)
+                    </td>
+                    <td data-label="Concluido" class="status" data-status="@item.Concluido">
+                        @Html.DisplayFor(modelItem => item.Concluido)
+                    </td>
+                    <td data-label="Agendado">@Html.DisplayFor(modelItem => item.Agendado)</td>
+                    <td data-label="Pago">@Html.DisplayFor(modelItem => item.Pago)</td>
+                    @if(item.Frete < 1.00)
+                    {
+                        <td data-label="Frete" style="color:green; font-style: italic">Grátis</td>
+                    }
+                    else
+                    {
+                        <td data-label="Frete">R$@item.Frete.ToString("F2", CultureInfo.InvariantCulture)</td>
+
+                    }
+
+                    <td class="actions">
+                        <a class="btn" asp-action="Edit" asp-route-id="@item.Cod_Pedido">Editar</a>
+                        <a class="btn" asp-action="Details" asp-route-id="@item.Cod_Pedido">Detalhes</a>
+                        <a class="btn" asp-action="Delete" asp-route-id="@item.Cod_Pedido">Deletar</a>
+                    </td>
+                </tr>
+            }
+            <br />
+        </tbody>
+    </table>
+</div>

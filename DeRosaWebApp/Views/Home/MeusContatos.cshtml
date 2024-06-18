@@ -1,0 +1,26 @@
+﻿@using DeRosaWebApp.Models.Management;
+@model ManagementSobre
+@{
+    ViewData["Title"] = "Entre em Contato";
+}
+
+<div class="meus-contatos">
+    <h1>Entre em Contato</h1>
+    <br />
+    <p>Se você tem alguma dúvida, reclamação ou sugestão, por favor entre em contato conosco. Estamos aqui para ajudar!</p>
+    <p>Aqui você pode fazer contato direto sobre dúvidas:</p>
+    <div class="contact-cards">
+        <div class="contact-card">
+            <img src="~/Imagens/whatsapp.svg" alt="WhatsApp Icon" class="contact-icon" />
+            <a class="contato" href="https://web.whatsapp.com/send?phone=5535991770091" target="_blank">WhatsApp</a>
+        </div>
+        <div class="contact-card">
+            <img src="~/Imagens/call.svg" alt="Phone Icon" class="contact-icon" /> <br />
+            <a class="contato" href="tel:+5535991770091">(35) 99177-0091</a>
+        </div>
+        <div class="contact-card">
+            <img src="~/Imagens/instagram.svg" alt="Instagram Icon" class="contact-icon" />
+            <a class="contato" href="https://www.instagram.com/derosadoces/" target="_blank">Instagram</a>
+        </div>
+    </div>
+</div>

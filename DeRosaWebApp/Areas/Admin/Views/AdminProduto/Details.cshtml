@@ -1,0 +1,81 @@
+﻿@using DeRosaWebApp.Areas.Admin.ViewModel;
+@using System.Globalization;
+@model ProdutoCategoriaViewModel
+
+@{
+    ViewData["Title"] = "Detalhes";
+}
+
+@* <h1>Detalhes</h1> *@
+
+<div>
+    <h4 class="cat-title">Detalhes do produto</h4>
+    <hr />
+</div>
+<div class="btn-edit-div">
+    <a asp-action="Index" class="btn">Voltar </a>
+</div>
+
+<div class="tab-detail">
+    <table class="table-prod-detail">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.Cod_Produto)</th>
+            <td>@Html.DisplayFor(model => model._Produto.Cod_Produto)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.Nome)</th>
+            <td>@Html.DisplayFor(model => model._Produto.Nome)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.Preco)</th>
+            <td>@Model._Produto.Preco.ToString("F2", CultureInfo.InvariantCulture)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.EmEstoque)</th>
+            <td>@Html.DisplayFor(model => model._Produto.EmEstoque)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.ImagemUrl)</th>
+            <td><img src="@Model._Produto.ImagemUrl" alt="imagem_produto_@Model._Produto.Nome" class="img-detail-prod" /></td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.DescricaoCurta)</th>
+            <td>@Html.DisplayFor(model => model._Produto.DescricaoCurta)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.PrecoSecundario)</th>
+            <td>@Model._Produto.PrecoSecundario.ToString("F2", CultureInfo.InvariantCulture)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.Indisponivel)</th>
+            <td>@Html.DisplayFor(model => model._Produto.Indisponivel)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.EstoqueAgendamento)</th>
+            <td>@Html.DisplayFor(model => model._Produto.EstoqueAgendamento)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Produto.Promocional)</th>
+            <td>@Html.DisplayFor(model => model._Produto.Promocional)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Categoria.IdCategoria)</th>
+            <td>@Html.DisplayFor(model => model._Categoria.IdCategoria)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model._Categoria.CategoriaNome)</th>
+            <td>@Html.DisplayFor(model => model._Categoria.IdCategoria)</td>
+        </tr>
+    </table>
+    <div class="btn-edit-div">
+        <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model?._Produto.Cod_Produto">Editar</a>
+    </div>
+</div>
+
+
+<style>
+
+    * {
+        font-family: Montserrat;
+    }
+</style>

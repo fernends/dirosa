@@ -1,0 +1,43 @@
+﻿@using DeRosaWebApp.Models;
+@using System.Globalization;
+@model Produto
+
+<div class="product-card" data-category="@Model.IdCategoria">
+    <div class="card h-90 border-0" style="margin-top: 10px;">
+        @if (Model.ImagemUrl.Contains("www") || Model.ImagemUrl.Contains("http") || Model.ImagemUrl.Contains("https"))
+        {
+            <img class="card-img-top" src="@Model.ImagemUrl" alt="Imagem do produto @Model.Nome" />
+        }
+        else
+        {
+            <img class="card-img-top" src="@Model.ImagemUrl" alt="Imagem do produto @Model.Nome" />
+        }
+        <div class="card-body">
+            <h5 class="card-title" style="letter-spacing:3px">@Model.Nome.ToUpper()</h5>
+            <p class="card-text fs-6 fst-italic" style="font-family:'Linux Libertine G'">
+                @if (Model.DescricaoCurta.Length > 35)
+                {
+                    @Model.DescricaoCurta.Substring(0, 35)
+
+                }
+                else
+                {
+                    @Model.DescricaoCurta
+                }
+                ...
+            </p>
+            @if (Model.Promocional)
+            {
+                <p class="card-text"><small class="text-danger">Promoção! R$ @Model.PrecoSecundario.ToString("N2")</small></p>
+            }
+            else
+            {
+                <p class="card-text"><small class="text-muted">R$ @Model.Preco.ToString("N2")</small></p>
+
+            }
+        </div>
+        <div class="card-footer border-0">
+            <a class="btn" asp-controller="Produto" asp-action="ProdutoDetalhe" method="get" asp-route-cod_produto="@Model.Cod_Produto" role="button">Ver mais Detalhes</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+﻿@using DeRosaWebApp.Models;
+@model ReflectionIT.Mvc.Paging.PagingList<Categoria>
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<h1 class="titulo-tabela" >Categorias dos Produtos</h1>
+
+<p>
+    <a asp-action="Create" class="btn-primary create-button">Criar nova categoria</a>
+</p>
+<div class="center">
+    <div class="form-container">
+        <form method="get" class="form-inline search-form">
+            <input name="filter" class="form-control" placeholder="Pesquise uma categoria..." value="@Model.RouteValue["Filter"]" />
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true">Procurar</span>
+            </button>
+        </form>
+        <p class="total-count">Total de categorias: @Model.TotalRecordCount</p>
+        <div>
+            <vc:pager paging-list="@Model"></vc:pager>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid admin">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.IdCategoria)</th>
+                <th>@Html.DisplayNameFor(model => model.CategoriaNome)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td data-label="ID Categoria">@Html.DisplayFor(modelItem => item.IdCategoria)</td>
+                    <td data-label="Nome da Categoria">@Html.DisplayFor(modelItem => item.CategoriaNome)</td>
+                    <td class="actions" data-label="Ações">
+                        <a class="btn" asp-action="Edit" asp-route-id="@item.IdCategoria">Editar</a>
+                        <a class="btn" asp-action="Details" asp-route-id="@item.IdCategoria">Detalhes</a>
+                        <a class="btn" asp-action="Delete" asp-route-id="@item.IdCategoria">Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

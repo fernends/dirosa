@@ -1,0 +1,96 @@
+﻿@model List<Endereco>
+
+@{
+    var formaEntregaSelecionada = ViewBag.RetiradaLocal == "true" ? "local" : "domicilio";
+}
+
+<form asp-action="EscolhaEndereco" asp-controller="Endereco" method="post" class="escolha-endereco-form">
+    <div class="escolha-endereco">
+        <h4>Escolha a forma de entrega:</h4>
+        <div class="form-group">
+            <select id="formaEntrega" name="formaEntrega" class="forma-entrega-select" onchange="atualizarFormaEntrega()">
+                <option value="domicilio" selected="@(formaEntregaSelecionada == "domicilio" ? "true" : "false")">Entrega a domicílio</option>
+                <option value="local" selected="@(formaEntregaSelecionada == "local" ? "true" : "false")">Retirada no local</option>
+            </select>
+        </div>
+        <div class="card-body">
+            <h6 class="text-danger">@TempData["Erro"]</h6>
+            <div id="enderecoUsuario" style="display:none;">
+                <h5>Endereço do Usuário:</h5>
+                @foreach (Endereco endereco in Model)
+                {
+                    <div class="container-escolha-endereco" onclick="selecionarEndereco(this, @endereco.Id)">
+                        <input type="radio" name="selectedAddressId" value="@endereco.Id">
+                        <label>@endereco.Logradouro, @endereco.Numero (@endereco.Complemento), @endereco.Bairro, @endereco.Cidade, @endereco.UF, @endereco.CEP</label>
+                        <a asp-action="EditEndereco" asp-controller="Endereco" asp-route-enderecoId="@endereco.Id">Editar endereço</a>
+                    </div>
+                }
+            </div>
+            <div id="enderecoLocal" style="display:none;">
+                <h5>Endereço para Retirada:</h5>
+                <p>Alameda Serra dos Ipês Rosa, 81, Bairro Serras Altas, Poços de Caldas, MG, 37.718-522</p>
+                <p>Condomínio Residencial Serras Altas Golf State</p>
+                <p><strong>Retirada na portaria do condominio!</strong></p>
+            </div>
+        </div>
+        <div class="container-escolha-botoes">
+            <a class="btn-endereco" id="btnsmall" asp-controller="Carrinho" asp-action="Index">Voltar</a>
+            <a class="btn-endereco" id="btnsmall" asp-action="AdicionarEndereco" asp-controller="Endereco">Adicionar novo</a>
+            <input class="btn-endereco" id="btnsmall" type="submit" value="Confirmar endereço" />
+        </div>
+        <div class="alerta-frete">
+            <ul class="frete-lista">
+                <li>Retirada no Local: <span class="text-success">Grátis</span></li>
+                <li>Entrega a domicílio: <span class="text-success">R$20.00</span></li>
+            </ul>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <script>
+        function atualizarFormaEntrega() {
+            const formaEntrega = document.getElementById("formaEntrega").value;
+            const bodyData = `formaEntrega=${encodeURIComponent(formaEntrega)}`;
+
+            fetch('/Pedido/AtualizarFormaDeEntrega', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: bodyData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Sessão atualizada com sucesso.");
+                        const enderecoUsuario = document.getElementById("enderecoUsuario");
+                        const enderecoLocal = document.getElementById("enderecoLocal");
+                        if (formaEntrega === "domicilio") {
+                            enderecoUsuario.style.display = "block";
+                            enderecoLocal.style.display = "none";
+                        } else {
+                            enderecoUsuario.style.display = "none";
+                            enderecoLocal.style.display = "block";
+                        }
+                    } else {
+                        throw new Error('Falha na atualização da sessão');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar a sessão:', error);
+                    alert('Não foi possível atualizar a forma de entrega. Por favor, tente novamente.');
+                });
+        }
+
+        function selecionarEndereco(elemento, enderecoId) {
+            const radioButtons = document.querySelectorAll('input[name="selectedAddressId"]');
+            radioButtons.forEach(radioButton => {
+                radioButton.checked = radioButton.value === enderecoId.toString();
+            });
+        }
+
+        // Inicializa a exibição correta com base na seleção atual quando a página carrega
+        document.addEventListener("DOMContentLoaded", function () {
+            atualizarFormaEntrega();
+        });
+    </script>
+}

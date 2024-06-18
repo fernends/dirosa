@@ -1,0 +1,84 @@
+﻿@using DeRosaWebApp.Models;
+@using System.Globalization;
+@model ProdutoDetalheViewModel
+
+<div class="product-details-container" style="padding: 0 auto;"> 
+    <div class="product-image">
+        @if (Model.Produto.Value.ImagemUrl.Contains("www") || Model.Produto.Value.ImagemUrl.Contains("https") || Model.Produto.Value.ImagemUrl.Contains("http"))
+        {
+            <img src='@Model.Produto.Value.ImagemUrl' alt="@Model.Produto.Value.Nome" />
+        }
+        else
+        {
+            <input class="img-loja" type="image" src='@Model.Produto.Value.ImagemUrl' alt="@Model.Produto.Value.Nome" />
+        }
+
+    </div>
+    <div class="product-details">
+        <h1 class="product-title" style="">@Model.Produto.Value.Nome</h1>
+        <p class="card-text fs-7 fst-italic" style="font-family:'Linux Libertine G';">@Model.Produto.Value.DescricaoCurta</p>
+        @if (Model.Produto.Value.Promocional)
+        {
+            <h2 class="product-price">R$@Model.Produto.Value.PrecoSecundario.ToString("F2", CultureInfo.InvariantCulture)</h2>
+
+        }
+        else
+        {
+            <h2 class="product-price">R$@Model.Produto.Value.Preco.ToString("F2", CultureInfo.InvariantCulture)</h2>
+        }
+
+        @{
+            int quantidade = 1;
+        }
+
+        @if (Model.Produto.Value.EmEstoque > 0 && !Model.Produto.Value.Indisponivel)
+        {
+            <p class="stock-status"> Disponível: @Model.Produto.Value.EmEstoque</p>
+            <form method="post" asp-controller="Carrinho" asp-action="AdicionarNoCarrinho" asp-route-cod_Produto="@Model.Produto.Value.Cod_Produto" asp-route-quantidadeAdicionar="@quantidade">
+                <div class="form-group">
+                    <label class="stock-status" for="quantidade">Quantidade  </label>
+                    @if (string.Equals(Model.Categoria.CategoriaNome, "Comemorativos"))
+                    {
+                        <input type="number" id="quantidade" name="quantidadeAdicionar" value="@quantidade" min="12" max="100" step="2" />
+                        <span class="stock-status" style="font-style:italic">Mínimo de 12 produtos</span>
+                    }
+                    else
+                    {
+                        <input type="number" id="quantidade" name="quantidadeAdicionar" value="@quantidade" min="1" max="12" step="2" />
+
+                    }
+                </div>
+                <div class="w-100 text-center">
+                    <button type="submit" class="btn-add-cart">Adicionar ao carrinho</button>
+                </div>
+            </form>
+        }
+        else if (Model.Produto.Value.EstoqueAgendamento > 0)
+        {
+            <p class="product-unavailable">Produto indisponível no momento, deseja agendar?</p>
+            <p class="stock-status"> Disponível para agendar @Model.Produto.Value.EstoqueAgendamento</p>
+            <form method="post" asp-controller="Carrinho" asp-action="AdicionarNoCarrinho" asp-route-cod_Produto="@Model.Produto.Value.Cod_Produto" asp-route-quantidadeAdicionar="@quantidade" asp-route-agendado="@true">
+                <div class="form-group">
+                    <label>Quantidade</label>
+                    <input type="number" id="quantidade" name="quantidadeAdicionar" value="@quantidade" min="1" max="12" />
+                </div>
+                <button type="submit" class="btn-add-cart">Adicionar ao carrinho</button>
+            </form>
+        }
+        else
+        {
+            <p class="product-unavailable">Produto indisponível no momento.</p>
+        }
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        var message = '@TempData["ErroAdicionar"]'
+        if (message) {
+            alert(message);
+        }
+    };
+
+
+</script>

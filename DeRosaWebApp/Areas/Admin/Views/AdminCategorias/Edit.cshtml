@@ -1,0 +1,47 @@
+﻿@using DeRosaWebApp.Areas.Admin.ViewModel;
+@model Categoria
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<h4 class="cat-title">Editar categoria</h4>
+<hr />
+
+<div class="btn-edit-div">
+    <a asp-action="Index" class="btn">Voltar </a>
+</div>
+
+<div class="row custom-cat">
+    <div class="col-md-4 test-edit">
+        <form method="post" asp-action="Edit" asp-controller="AdminCategorias" asp-area="Admin" asp-route-id="@Model.IdCategoria">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @* <label asp-for="IdCategoria" /> *@ @* RETIREI DE TESTE POIS ESTAVA ALTERANDO O PADRÃO, FUNCIONOU NORMALMENTE. *@
+
+            <div class="form-group">
+                <label asp-for="CategoriaNome" class="control-label"></label>
+                <input asp-for="CategoriaNome" class="form-control" />
+                <span asp-validation-for="CategoriaNome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    if (@ViewBag.Sucesso != '') {
+        alert('@ViewBag.Sucesso');
+    }
+</script>
+
+<style>
+
+    * {
+        font-family: Montserrat;
+    }
+</style>

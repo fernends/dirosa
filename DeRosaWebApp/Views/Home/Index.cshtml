@@ -1,0 +1,95 @@
+@using DeRosaWebApp.ViewModel;
+@model HomeViewModel
+<link rel="stylescheet" type="text/css" href="~/css/site.css" />
+
+@{
+    ViewData["Title"] = "DéRosa Doceria";
+}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Licorice&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<div class="banner">
+    <h1 class="title-home">DéRosa Doceria</h1>
+    <br />
+    <button class="btn1">
+        <a class="a-link1" asp-controller="Home" asp-action="Sobre">SOBRE</a>
+    </button>
+    <button class="btn2">
+        <a class="a-link2" asp-controller="Produto" asp-action="Produtos">PRODUTOS</a>
+    </button>
+</div>
+<div class="container-home">
+    <div class="offers">
+        <div class="title-second-container">
+            <h1 class="title-second" style="color: @Model.ManagementHome.Color; font-family:'@Model.ManagementHome.Font'">@Model.ManagementHome.TituloSemana</h1>
+        </div>
+        @foreach (var produto in Model.Produtos)
+        {
+
+            @if (produto.ProdutoDaSemana)
+            {
+            <div class="card-deck" style="margin-top: 10px;">
+                <partial name="_produtoHome" for="@produto" />
+            </div>
+                
+            }
+        }
+        <div class="span-m">
+            <a class="botao-ver-mais" asp-controller="Produto" asp-action="Produtos">Clique aqui para ver todos os produtos</a>
+        </div>
+    </div>
+
+    <div class="about">
+        <div class="text-about">
+            <h1 class="title-about">Nossa História</h1>
+            <div class="underline-about">
+                <div class="underline-about1"></div>
+            </div>
+            <br />
+            <br />
+            <p>
+                A DéRosa é uma doceria idealizada por Júlia Junqueira, apaixonada pela confeitaria e que pretende levar a memória afetiva da confeitaria através de seus doces.
+            </p>
+        </div>
+        <img class="julia" src="~/Imagens/julia.png" width="20%" height="20%" />
+    </div>
+
+    <div class="more">
+        <div class="more-text">
+            <h1 class="title-more">Home Made</h1>
+            <h1 class="subtitle-home">RECEITAS QUE CRIAM LAÇOS</h1>
+            <div class="more-underline">
+                <div class="more-underline1"></div>
+                <div class="more-underline2"></div>
+            </div>
+
+            <br />
+            <p>
+                Descubra o prazer com nossas receitas simples e deliciosas com sobremesas irresistíveis.
+                Surpreenda-se com os nossos doces feitos com amor e delicie-se com cada pedacinho de felicidade que eles proporcionam.
+            </p>
+        </div>
+    </div>
+
+    <div class="photos">
+    </div>
+
+
+
+</div>
+<script>
+    window.onload = function () {
+        var message = '@TempData["LogoutMessage"]'
+        var message2 = '@TempData["LoginMessage"]'
+        if (message) {
+            alert(message);
+        }
+        else if (message2) {
+            alert(message2);
+        }
+    };
+
+
+</script>

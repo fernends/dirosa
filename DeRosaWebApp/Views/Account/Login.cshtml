@@ -1,0 +1,66 @@
+﻿﻿@using DeRosaWebApp.ViewModel;
+@model UsuarioViewModel
+
+
+<div class="containerf">
+    <div class="containerf">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <img class="imglogin" width="400px" height="400px" src="~/Imagens/Logo_Login.png" alt="iconelogin" />
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mw-md py-12 mx-auto">
+                    <div class="container-cadastro">
+                        <h1>Login</h1>
+                        <form action="">
+                            <div class="form-login">
+                                <div class="mb-4 input-login">
+                                    <input asp-for="Usuario" class="form-control" placeholder="Usuário">
+                                    <span class="text-danger" asp-validation-for="Usuario"></span>
+                                    <div asp-validation-summary="All"></div>
+                                </div>
+                                <div class="mb-4 input-login">
+                                    <div class="input-senha-login">
+                                        <input id="password-input" type="password" asp-for="Senha" class="form-control" placeholder="Senha">
+                                        <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility()">
+                                            <img id="toggle-icon" src="~/Imagens/visibility_off.svg" alt="password-show" width="25" height="25">
+                                        </button>
+                                    </div>
+                                    <a class="btn-esqueci-senha" asp-controller="Account" asp-action="EsqueciSenha" role="button">Esqueci a senha</a>
+                                </div>
+                                <div class="form-group-login">
+                                    <button class="btn-login" asp-controller="Account" asp-action="Login" formmethod="post" type="submit" role="button" value="Login">Login</button>
+                                    <button class="btn-login" asp-controller="Cadastro" asp-action="Cadastrar">Cadastrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePasswordVisibility(button) {
+        var input = button.previousElementSibling;
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById('password-input');
+            var toggleIcon = document.getElementById('toggle-icon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.src = '@Url.Content("~/Imagens/visibility.svg")';
+                toggleIcon.alt = 'password-hide';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.src = '@Url.Content("~/Imagens/visibility_off.svg")';
+                toggleIcon.alt = 'password-show';
+            }
+        }
+</script>

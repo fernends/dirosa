@@ -1,0 +1,81 @@
+﻿@using System.Globalization;
+@using DeRosaWebApp.Repository.Interfaces;
+@model Pedido
+
+<div class="checkout-resumo-container">
+    <div class="checkout-resumo-jumbotron">
+        <h2>@ViewBag.CheckoutCompletoMensagem</h2>
+    </div>
+    <div class="checkout-resumo-card">
+        <div class="checkout-resumo-card-body">
+            <p>Cliente: <strong>@Model.Nome</strong></p>
+            <p>Endereço: <strong>@Model.Logradouro, N.º @Model.Numero, @Model.Bairro, @Model.Cidade / @Model.Estado</strong></p>
+            <p>CEP: @Model.Cep</p>
+            <p>Complemento: @Model.Complemento</p>
+            <p class="checkout-resumo-data-entrega">Data aproximada da entrega: @Model.DataParaEntregar.ToString("dd/MM/yyyy")</p>
+
+            <p>Número do pedido: <strong>@Model.Cod_Pedido</strong></p>
+            <table class="checkout-resumo-table">
+                <thead>
+                    <tr>
+                        <th>Imagem</th>
+                        <th>Quantidade</th>
+                        <th>Produto</th>
+                        <th>Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model._PedidoDetalhes)
+                    {
+                        <tr>
+                            <td><img src="@item.Produto.ImagemUrl" width="40" height="40" /></td>
+                            <td>@item.Quantidade</td>
+                            <td>@item.Produto.Nome</td>
+                            <td>@item.Produto.Preco.ToString("F2", @CultureInfo.InvariantCulture)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <h4>
+                Valor Total do Pedido: <strong class="checkout-resumo-total-pedido">
+                    @(ViewBag.TotalPedido.ToString("C2", CultureInfo.CurrentCulture)) (com Frete 
+                    @if (Model.Frete < 20)
+                    {
+                        <span>Grátis</span>
+                    }
+                    else
+                    {
+                        <span>de R$ @Model.Frete.ToString("F2", CultureInfo.InvariantCulture)</span>
+                    })
+                </strong>
+            </h4>
+            <div class="checkout-resumo-form-group checkout-resumo-text-center">
+                <a class="btn btn-success btn-small" asp-controller="Pedido" asp-action="Checkout">Voltar</a>
+            </div>
+        </div>
+    </div>
+    <p>Você tem até <strong>@Model.DataExpiracao</strong> para realizar o pagamento</p>
+    <div class="checkout-resumo-form-group">
+        <a class="btn btn-primary" asp-action="Payment" asp-controller="Payment" asp-route-cod_pedido="@Model.Cod_Pedido">Pagar</a>
+    </div>
+</div>
+
+@*<script>
+    function checkOrders() {
+        const currentDate = new Date();
+        const ordersDate = @Json.Serialize(Model.DataExpiracao);
+        const expireDate = new Date(orderExpireDate);
+
+        if (expireDate < currentDate) {
+            @inject IPedidoService _pedidoService
+    @{
+        await _pedidoService.VerificarPedidosExpirados();
+    }
+                window.location.href = '@Url.Action("Index", "Home")';
+        }
+    }
+
+    checkOrders();
+
+    setInterval(checkOrders, 30000);
+</script>*@

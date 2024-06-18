@@ -1,0 +1,45 @@
+﻿@model DeRosaWebApp.Models.Categoria
+
+@{
+    ViewData["Title"] = "Details";
+    
+}
+
+<div>
+    <h4 class="cat-title"> Detalhes categoria</h4>
+    <hr />
+    <div class="btn-edit-div">
+    <a asp-action="Index" class="btn">Voltar </a>
+</div>
+</div>
+
+<div class="custom-cat-detail">
+    <div class="tab-detail">
+        <table class="table-cat-detail">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CategoriaNome)</th>
+                <th>@Html.DisplayNameFor(model => model.IdCategoria)</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>@Html.DisplayFor(model => model.CategoriaNome)</td>
+                <td>@Html.DisplayFor(model => model.IdCategoria)</td>
+                <td>
+                    <div class="btn-edit-div">
+                        <a asp-action="Edit" asp-route-id="@Model?.IdCategoria" class="btn">Edit</a> 
+                     </div>
+                </td>
+            </tr>
+        </table
+    </div>
+
+
+</div>
+
+<style>
+
+     *{
+        font-family: Montserrat;
+    }
+</style>
+                

@@ -1,0 +1,125 @@
+﻿@using DeRosaWebApp.Repository.Interfaces;
+@using DeRosaWebApp.ViewModel;
+@using System.Globalization;
+@model MeusPedidosViewModel
+@{
+    var DateTimes = new List<DateTime>();
+    var dateTimeNull = new DateTime(1, 1, 1); ;
+}
+
+@try
+{
+    @if (Model.Pedidos.Count() == 0)
+    {
+        <h1 class="text-center">Você ainda não realizou nenhum pedido</h1>
+    }
+    <div class="container">
+        <div class="row">
+            @foreach (var pedido in Model.Pedidos)
+            {
+                <div class="col-md-6" style="width: 100%; font-size: 12px;">
+                    <div class="container-pedido">
+                        <div class="header-pedido">
+                            <h5><strong>Pedido:</strong> @pedido.Cod_Pedido</h5>
+                            <p><strong>Data do Pedido:</strong> @pedido.DataPedido</p>
+                        </div>
+                        <p><strong>Endereço:</strong> @pedido.Logradouro @pedido.Numero</p>
+                        <p><strong>Nome:</strong> @pedido.Nome</p>
+                        <p><strong>Preço total:</strong><span class="status-pedido">R$@pedido.TotalPedido.ToString("F2",@CultureInfo.InvariantCulture)</span></p>
+                        <p><strong>Quantidade de produtos: </strong> @pedido.TotalItensPedido</p>
+                        @if (!pedido.DataParaEntregar.Equals(dateTimeNull))
+                        {
+                            <p><strong>Previsão da entrega:</strong> @pedido.DataParaEntregar.ToString("dd/MM/yyyy")</p>
+                        }
+                        @if (pedido.Pago)
+                        {
+                            <p>
+                                <strong>Status:</strong>
+                                @if (pedido.Entregue)
+                                {
+                                    <span><i style="color:darkcyan">Seu pedido foi entregue :)</i></span>
+                                }
+                                else if (pedido.Concluido)
+                                {
+                                    <span><i style="color:darkcyan">Preparado e pronto para entrega!</i></span>
+                                }
+                                else
+                                {
+                                    <span><i style="color:darkcyan">Recebido e em preparação.</i></span>
+                                }
+                            </p>
+                        }
+                        else
+                        {
+                            <a class="link-pagamento" asp-action="Resumo" asp-controller="Pedido" asp-route-cod_pedido="@pedido.Cod_Pedido">Finalize o pagamento até @pedido.DataExpiracao.ToString("dd/MM/yyyy HH:mm:ss")</a>
+                        }
+
+                        <h6><strong>Produtos:</strong></h6>
+                        @inject IPedidoService _pedidoService
+                        @{
+                            var produtosInPedidos = await _pedidoService.GetMeusProdutos(pedido.Cod_Pedido);
+                            foreach (var produto in produtosInPedidos)
+                            {
+                                <div class="item-pedido">
+                                    <img src='@produto.ImagemUrl' alt="Produto">
+                                    <div class="detalhes-pedido">
+                                        <h5>@produto.Nome</h5>
+                                        <p>@produto.DescricaoCurta</p>
+                                        <p>Preço: R$@produto.Preco.ToString("F2",@CultureInfo.InvariantCulture)</p>
+                                    </div>
+                                </div>
+                            }
+                            @foreach (PedidoDetalhe p in pedido._PedidoDetalhes)
+                            {
+                                if (p.Quantidade > 1)
+                                {
+                                    <p style="font-size: small">  @p.Produto.Nome <strong> x @p.Quantidade </strong></p>
+
+                                }
+                                else
+                                {
+                                    <p style=" font-size: small"> @p.Produto.Nome <strong>x @p.Quantidade </strong></p>
+
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+catch (NullReferenceException)
+{
+    <h2>Carregando... por favor, recarregue a página</h2>
+    <script>
+        window.location.reload();
+    </script>
+}
+
+
+
+<script>
+    function checkOrders() {
+        const currentDate = new Date();
+        const ordersDate = @Json.Serialize(DateTimes);
+
+        for (const orderExpireDate of ordersDate) {
+            const expireDate = new Date(orderExpireDate);
+
+            if (expireDate < currentDate) {
+                @inject IPedidoService _pedidoService
+    @{
+        await _pedidoService.VerificarPedidosExpirados();
+    }
+                    window.location.reload();
+            }
+        }
+
+    }
+
+    checkOrders();
+
+    setInterval(checkOrders, 30000);
+
+</script>
